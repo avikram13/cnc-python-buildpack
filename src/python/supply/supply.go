@@ -62,12 +62,22 @@ func Run(s *Supplier) error {
 		s.Log.Error("Error checking existence of environment.yml: %v", err)
 		return err
 	} else if exists {
-		s.Log.BeginStep("For Conda")
-		return conda.Run(conda.New(s.Installer, s.Stager, s.Command, s.Log))
+		return RunBoth(s)
+		// s.Log.BeginStep("For Conda")
+		// return conda.Run(conda.New(s.Installer, s.Stager, s.Command, s.Log))
 	} else {
 		s.Log.BeginStep("For non Conda")
 		return RunPython(s)
 	}
+}
+
+func RunBoth(s *Supplier) error {
+
+	s.Log.BeginStep("running Conda")
+	conda.Run(conda.New(s.Installer, s.Stager, s.Command, s.Log))
+
+	s.Log.BeginStep("running Pip")
+	return RunPython(s)
 }
 
 func RunPython(s *Supplier) error {
