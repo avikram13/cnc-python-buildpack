@@ -73,11 +73,11 @@ func Run(s *Supplier) error {
 
 func RunBoth(s *Supplier) error {
 
-	s.Log.BeginStep("running Conda")
-	conda.Run(conda.New(s.Installer, s.Stager, s.Command, s.Log))
-
 	s.Log.BeginStep("running Pip")
-	return RunPython(s)
+	RunPython(s)
+
+	s.Log.BeginStep("running Conda")
+	return conda.Run(conda.New(s.Installer, s.Stager, s.Command, s.Log))
 }
 
 func RunPython(s *Supplier) error {
